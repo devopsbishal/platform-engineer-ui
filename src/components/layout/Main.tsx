@@ -1,22 +1,22 @@
-import React from 'react'
-import { cn } from '@/lib/utils'
+import React from 'react';
+import { cn } from '@/lib/utils';
 
 interface MainProps extends React.HTMLAttributes<HTMLElement> {
-  fixed?: boolean
-  ref?: React.Ref<HTMLElement>
+  fixed?: boolean;
+  ref?: React.Ref<HTMLElement>;
 }
 
-export const Main = ({ fixed, ...props }: MainProps) => {
+export const Main = ({ fixed = false, ...props }: MainProps) => {
   return (
     <main
       className={cn(
         'peer-[.header-fixed]/header:mt-16',
-        'px-4 py-6',
+        'px-4 pb-4 pt-2',
         fixed && 'fixed-main flex flex-col flex-grow overflow-hidden'
       )}
       {...props}
     />
-  )
-}
+  );
+};
 
-Main.displayName = 'Main'
+Main.displayName = 'Main';

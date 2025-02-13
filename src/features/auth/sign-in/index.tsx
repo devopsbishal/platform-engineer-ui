@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { PATH } from '@/constants/PATH';
 import { Card } from '@/components/ui/card';
 import AuthLayout from '../AuthLayout';
-import { useRedirectAfterLogin } from '../hooks/useRedirectAfterLogin';
+import { useRedirectAfterLogin } from '../hooks/useRedirectAfterLogin.hook';
 import { useAuth } from '../stores/authStore';
 import { UserAuthForm } from './components/UserAuthForm';
 
@@ -37,7 +37,10 @@ export default function SignIn() {
         </div>
         <UserAuthForm />
         <p className='text-center mt-4'>
-          Don't have an account yet? <Link className='underline underline-offset-4' to={PATH.signUp}>Sign Up</Link>
+          Don't have an account yet?{' '}
+          <Link className='underline underline-offset-4' to={PATH.signUp}>
+            Sign Up
+          </Link>
         </p>
         <p className='mt-4 px-8 text-center text-sm text-muted-foreground'>
           By clicking login, you agree to our{' '}

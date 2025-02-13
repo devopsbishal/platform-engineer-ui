@@ -13,6 +13,7 @@ import { ThemeSwitch } from '@/components/ThemeSwitch'
 import { Header } from '@/components/layout/Header'
 import { Main } from '@/components/layout/Main'
 import SidebarNav from './components/SidebarNav'
+import CustomBreadcrumbs from '@/components/CustomBreadcrumb'
 
 export default function Settings() {
   return (
@@ -31,6 +32,7 @@ export default function Settings() {
           <h1 className='text-2xl font-bold tracking-tight md:text-3xl'>
             Settings
           </h1>
+          <CustomBreadcrumbs />
           <p className='text-muted-foreground'>
             Manage your account settings and set e-mail preferences.
           </p>

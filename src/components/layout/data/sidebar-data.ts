@@ -1,5 +1,4 @@
 import {
-  IconChecklist,
   IconHelp,
   IconLayoutDashboard,
   IconNotification,
@@ -15,6 +14,8 @@ import { useAuthStore } from '@/features/auth/stores/authStore'
 
 
 const { user } = useAuthStore.getState();
+
+console.log(user, "user");
 
 export const sidebarData: SidebarData = {
   user: {
@@ -49,20 +50,10 @@ export const sidebarData: SidebarData = {
           icon: IconLayoutDashboard,
         },
         {
-          title: 'Products',
-          url: '/product',
+          title: 'EC2',
+          url: '/ec2',
           icon: IconPackage,
-        },
-        {
-          title: 'Category',
-          url: '/product-category',
-          icon: IconPackage,
-        },
-        {
-          title: 'Tasks',
-          url: '/tasks',
-          icon: IconChecklist,
-        },
+        }
       ],
     },
     {

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { jwtDecode } from 'jwt-decode'
 import { cookieManager } from '../utils'
-import { AuthState, AuthUser } from '../types/auth.types'
+import { AuthState, AuthUser } from '../types/IAuthTypes'
 
 // Create the store
 export const useAuthStore = create<AuthState>((set, get) => ({

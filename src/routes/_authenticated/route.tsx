@@ -8,13 +8,12 @@ import {
   useNavigate,
 } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
+import { fetchUserProfile } from '@/utils/helperUserProfile';
 import { PATH } from '@/constants/PATH';
 import { SearchProvider } from '@/context/SearchContext';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import SkipToMain from '@/components/SkipToMain';
 import { AppSidebar } from '@/components/layout/AppSidebar';
 import { useAuth, useAuthStore } from '@/features/auth/stores/authStore';
-import { fetchUserProfile } from '@/utils/fetchUserProfile';
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: ({ location }) => {
@@ -31,9 +30,9 @@ export const Route = createFileRoute('/_authenticated')({
       });
     }
   },
-  loader: async () => {
-    // Get user ID from auth store
-  },
+  // loader: async () => {
+  //   // Get user ID from auth store
+  // },
   component: AuthenticatedLayout,
 });
 
@@ -61,18 +60,21 @@ function AuthenticatedLayout() {
     }
   }, [user, navigate]);
 
-  useQuery({
+  const { isError, error } = useQuery({
     queryKey: ['userProfile', user?.id, accessToken],
-    queryFn: () => fetchUserProfile(accessToken!),
+    queryFn: async () => await fetchUserProfile(accessToken!),
     gcTime: 30 * 60 * 1000,
     staleTime: 5 * 60 * 1000,
     enabled: !!user && !!accessToken,
   });
 
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <SearchProvider>
       <SidebarProvider defaultOpen={defaultOpen}>
-        <SkipToMain />
         <AppSidebar />
         <div
           id='content'

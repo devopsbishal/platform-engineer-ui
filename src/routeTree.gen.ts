@@ -16,7 +16,6 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated/route'
 import { Route as AuthenticatedIndexImport } from './routes/_authenticated/index'
 import { Route as authSignInImport } from './routes/(auth)/sign-in'
-import { Route as authOtpImport } from './routes/(auth)/otp'
 import { Route as auth500Import } from './routes/(auth)/500'
 
 // Create Virtual Routes
@@ -35,20 +34,14 @@ const authForgotPasswordLazyImport = createFileRoute(
 const AuthenticatedSettingsRouteLazyImport = createFileRoute(
   '/_authenticated/settings',
 )()
-const AuthenticatedTasksIndexLazyImport = createFileRoute(
-  '/_authenticated/tasks/',
-)()
 const AuthenticatedSettingsIndexLazyImport = createFileRoute(
   '/_authenticated/settings/',
 )()
-const AuthenticatedProductIndexLazyImport = createFileRoute(
-  '/_authenticated/product/',
-)()
-const AuthenticatedProductCategoryIndexLazyImport = createFileRoute(
-  '/_authenticated/product-category/',
-)()
 const AuthenticatedHelpCenterIndexLazyImport = createFileRoute(
   '/_authenticated/help-center/',
+)()
+const AuthenticatedEc2IndexLazyImport = createFileRoute(
+  '/_authenticated/ec2/',
 )()
 const AuthenticatedSettingsNotificationsLazyImport = createFileRoute(
   '/_authenticated/settings/notifications',
@@ -61,6 +54,9 @@ const AuthenticatedSettingsAppearanceLazyImport = createFileRoute(
 )()
 const AuthenticatedSettingsAccountLazyImport = createFileRoute(
   '/_authenticated/settings/account',
+)()
+const AuthenticatedEc2CreateInstanceIndexLazyImport = createFileRoute(
+  '/_authenticated/ec2/create-instance/',
 )()
 
 // Create/Update Routes
@@ -167,26 +163,11 @@ const authSignInRoute = authSignInImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const authOtpRoute = authOtpImport.update({
-  id: '/(auth)/otp',
-  path: '/otp',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const auth500Route = auth500Import.update({
   id: '/(auth)/500',
   path: '/500',
   getParentRoute: () => rootRoute,
 } as any)
-
-const AuthenticatedTasksIndexLazyRoute =
-  AuthenticatedTasksIndexLazyImport.update({
-    id: '/tasks/',
-    path: '/tasks/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any).lazy(() =>
-    import('./routes/_authenticated/tasks/index.lazy').then((d) => d.Route),
-  )
 
 const AuthenticatedSettingsIndexLazyRoute =
   AuthenticatedSettingsIndexLazyImport.update({
@@ -195,26 +176,6 @@ const AuthenticatedSettingsIndexLazyRoute =
     getParentRoute: () => AuthenticatedSettingsRouteLazyRoute,
   } as any).lazy(() =>
     import('./routes/_authenticated/settings/index.lazy').then((d) => d.Route),
-  )
-
-const AuthenticatedProductIndexLazyRoute =
-  AuthenticatedProductIndexLazyImport.update({
-    id: '/product/',
-    path: '/product/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any).lazy(() =>
-    import('./routes/_authenticated/product/index.lazy').then((d) => d.Route),
-  )
-
-const AuthenticatedProductCategoryIndexLazyRoute =
-  AuthenticatedProductCategoryIndexLazyImport.update({
-    id: '/product-category/',
-    path: '/product-category/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any).lazy(() =>
-    import('./routes/_authenticated/product-category/index.lazy').then(
-      (d) => d.Route,
-    ),
   )
 
 const AuthenticatedHelpCenterIndexLazyRoute =
@@ -227,6 +188,14 @@ const AuthenticatedHelpCenterIndexLazyRoute =
       (d) => d.Route,
     ),
   )
+
+const AuthenticatedEc2IndexLazyRoute = AuthenticatedEc2IndexLazyImport.update({
+  id: '/ec2/',
+  path: '/ec2/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any).lazy(() =>
+  import('./routes/_authenticated/ec2/index.lazy').then((d) => d.Route),
+)
 
 const AuthenticatedSettingsNotificationsLazyRoute =
   AuthenticatedSettingsNotificationsLazyImport.update({
@@ -272,6 +241,17 @@ const AuthenticatedSettingsAccountLazyRoute =
     ),
   )
 
+const AuthenticatedEc2CreateInstanceIndexLazyRoute =
+  AuthenticatedEc2CreateInstanceIndexLazyImport.update({
+    id: '/ec2/create-instance/',
+    path: '/ec2/create-instance/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/ec2/create-instance/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -288,13 +268,6 @@ declare module '@tanstack/react-router' {
       path: '/500'
       fullPath: '/500'
       preLoaderRoute: typeof auth500Import
-      parentRoute: typeof rootRoute
-    }
-    '/(auth)/otp': {
-      id: '/(auth)/otp'
-      path: '/otp'
-      fullPath: '/otp'
-      preLoaderRoute: typeof authOtpImport
       parentRoute: typeof rootRoute
     }
     '/(auth)/sign-in': {
@@ -409,25 +382,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsNotificationsLazyImport
       parentRoute: typeof AuthenticatedSettingsRouteLazyImport
     }
+    '/_authenticated/ec2/': {
+      id: '/_authenticated/ec2/'
+      path: '/ec2'
+      fullPath: '/ec2'
+      preLoaderRoute: typeof AuthenticatedEc2IndexLazyImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
     '/_authenticated/help-center/': {
       id: '/_authenticated/help-center/'
       path: '/help-center'
       fullPath: '/help-center'
       preLoaderRoute: typeof AuthenticatedHelpCenterIndexLazyImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/product-category/': {
-      id: '/_authenticated/product-category/'
-      path: '/product-category'
-      fullPath: '/product-category'
-      preLoaderRoute: typeof AuthenticatedProductCategoryIndexLazyImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/product/': {
-      id: '/_authenticated/product/'
-      path: '/product'
-      fullPath: '/product'
-      preLoaderRoute: typeof AuthenticatedProductIndexLazyImport
       parentRoute: typeof AuthenticatedRouteImport
     }
     '/_authenticated/settings/': {
@@ -437,11 +403,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsIndexLazyImport
       parentRoute: typeof AuthenticatedSettingsRouteLazyImport
     }
-    '/_authenticated/tasks/': {
-      id: '/_authenticated/tasks/'
-      path: '/tasks'
-      fullPath: '/tasks'
-      preLoaderRoute: typeof AuthenticatedTasksIndexLazyImport
+    '/_authenticated/ec2/create-instance/': {
+      id: '/_authenticated/ec2/create-instance/'
+      path: '/ec2/create-instance'
+      fullPath: '/ec2/create-instance'
+      preLoaderRoute: typeof AuthenticatedEc2CreateInstanceIndexLazyImport
       parentRoute: typeof AuthenticatedRouteImport
     }
   }
@@ -478,21 +444,19 @@ const AuthenticatedSettingsRouteLazyRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRouteLazyRoute: typeof AuthenticatedSettingsRouteLazyRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedEc2IndexLazyRoute: typeof AuthenticatedEc2IndexLazyRoute
   AuthenticatedHelpCenterIndexLazyRoute: typeof AuthenticatedHelpCenterIndexLazyRoute
-  AuthenticatedProductCategoryIndexLazyRoute: typeof AuthenticatedProductCategoryIndexLazyRoute
-  AuthenticatedProductIndexLazyRoute: typeof AuthenticatedProductIndexLazyRoute
-  AuthenticatedTasksIndexLazyRoute: typeof AuthenticatedTasksIndexLazyRoute
+  AuthenticatedEc2CreateInstanceIndexLazyRoute: typeof AuthenticatedEc2CreateInstanceIndexLazyRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRouteLazyRoute:
     AuthenticatedSettingsRouteLazyRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedEc2IndexLazyRoute: AuthenticatedEc2IndexLazyRoute,
   AuthenticatedHelpCenterIndexLazyRoute: AuthenticatedHelpCenterIndexLazyRoute,
-  AuthenticatedProductCategoryIndexLazyRoute:
-    AuthenticatedProductCategoryIndexLazyRoute,
-  AuthenticatedProductIndexLazyRoute: AuthenticatedProductIndexLazyRoute,
-  AuthenticatedTasksIndexLazyRoute: AuthenticatedTasksIndexLazyRoute,
+  AuthenticatedEc2CreateInstanceIndexLazyRoute:
+    AuthenticatedEc2CreateInstanceIndexLazyRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -501,7 +465,6 @@ const AuthenticatedRouteRouteWithChildren =
 export interface FileRoutesByFullPath {
   '': typeof AuthenticatedRouteRouteWithChildren
   '/500': typeof errors500LazyRoute
-  '/otp': typeof authOtpRoute
   '/sign-in': typeof authSignInRoute
   '/settings': typeof AuthenticatedSettingsRouteLazyRouteWithChildren
   '/forgot-password': typeof authForgotPasswordLazyRoute
@@ -517,16 +480,14 @@ export interface FileRoutesByFullPath {
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceLazyRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
+  '/ec2': typeof AuthenticatedEc2IndexLazyRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
-  '/product-category': typeof AuthenticatedProductCategoryIndexLazyRoute
-  '/product': typeof AuthenticatedProductIndexLazyRoute
   '/settings/': typeof AuthenticatedSettingsIndexLazyRoute
-  '/tasks': typeof AuthenticatedTasksIndexLazyRoute
+  '/ec2/create-instance': typeof AuthenticatedEc2CreateInstanceIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/500': typeof errors500LazyRoute
-  '/otp': typeof authOtpRoute
   '/sign-in': typeof authSignInRoute
   '/forgot-password': typeof authForgotPasswordLazyRoute
   '/sign-in-2': typeof authSignIn2LazyRoute
@@ -541,18 +502,16 @@ export interface FileRoutesByTo {
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceLazyRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
+  '/ec2': typeof AuthenticatedEc2IndexLazyRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
-  '/product-category': typeof AuthenticatedProductCategoryIndexLazyRoute
-  '/product': typeof AuthenticatedProductIndexLazyRoute
   '/settings': typeof AuthenticatedSettingsIndexLazyRoute
-  '/tasks': typeof AuthenticatedTasksIndexLazyRoute
+  '/ec2/create-instance': typeof AuthenticatedEc2CreateInstanceIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/(auth)/500': typeof auth500Route
-  '/(auth)/otp': typeof authOtpRoute
   '/(auth)/sign-in': typeof authSignInRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteLazyRouteWithChildren
   '/(auth)/forgot-password': typeof authForgotPasswordLazyRoute
@@ -569,11 +528,10 @@ export interface FileRoutesById {
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceLazyRoute
   '/_authenticated/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
+  '/_authenticated/ec2/': typeof AuthenticatedEc2IndexLazyRoute
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexLazyRoute
-  '/_authenticated/product-category/': typeof AuthenticatedProductCategoryIndexLazyRoute
-  '/_authenticated/product/': typeof AuthenticatedProductIndexLazyRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexLazyRoute
-  '/_authenticated/tasks/': typeof AuthenticatedTasksIndexLazyRoute
+  '/_authenticated/ec2/create-instance/': typeof AuthenticatedEc2CreateInstanceIndexLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -581,7 +539,6 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/500'
-    | '/otp'
     | '/sign-in'
     | '/settings'
     | '/forgot-password'
@@ -597,15 +554,13 @@ export interface FileRouteTypes {
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
+    | '/ec2'
     | '/help-center'
-    | '/product-category'
-    | '/product'
     | '/settings/'
-    | '/tasks'
+    | '/ec2/create-instance'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/500'
-    | '/otp'
     | '/sign-in'
     | '/forgot-password'
     | '/sign-in-2'
@@ -620,16 +575,14 @@ export interface FileRouteTypes {
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
+    | '/ec2'
     | '/help-center'
-    | '/product-category'
-    | '/product'
     | '/settings'
-    | '/tasks'
+    | '/ec2/create-instance'
   id:
     | '__root__'
     | '/_authenticated'
     | '/(auth)/500'
-    | '/(auth)/otp'
     | '/(auth)/sign-in'
     | '/_authenticated/settings'
     | '/(auth)/forgot-password'
@@ -646,18 +599,16 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/appearance'
     | '/_authenticated/settings/display'
     | '/_authenticated/settings/notifications'
+    | '/_authenticated/ec2/'
     | '/_authenticated/help-center/'
-    | '/_authenticated/product-category/'
-    | '/_authenticated/product/'
     | '/_authenticated/settings/'
-    | '/_authenticated/tasks/'
+    | '/_authenticated/ec2/create-instance/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   auth500Route: typeof auth500Route
-  authOtpRoute: typeof authOtpRoute
   authSignInRoute: typeof authSignInRoute
   authForgotPasswordLazyRoute: typeof authForgotPasswordLazyRoute
   authSignIn2LazyRoute: typeof authSignIn2LazyRoute
@@ -673,7 +624,6 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   auth500Route: auth500Route,
-  authOtpRoute: authOtpRoute,
   authSignInRoute: authSignInRoute,
   authForgotPasswordLazyRoute: authForgotPasswordLazyRoute,
   authSignIn2LazyRoute: authSignIn2LazyRoute,
@@ -698,7 +648,6 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated",
         "/(auth)/500",
-        "/(auth)/otp",
         "/(auth)/sign-in",
         "/(auth)/forgot-password",
         "/(auth)/sign-in-2",
@@ -716,17 +665,13 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/settings",
         "/_authenticated/",
+        "/_authenticated/ec2/",
         "/_authenticated/help-center/",
-        "/_authenticated/product-category/",
-        "/_authenticated/product/",
-        "/_authenticated/tasks/"
+        "/_authenticated/ec2/create-instance/"
       ]
     },
     "/(auth)/500": {
       "filePath": "(auth)/500.tsx"
-    },
-    "/(auth)/otp": {
-      "filePath": "(auth)/otp.tsx"
     },
     "/(auth)/sign-in": {
       "filePath": "(auth)/sign-in.tsx"
@@ -789,24 +734,20 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/settings/notifications.lazy.tsx",
       "parent": "/_authenticated/settings"
     },
+    "/_authenticated/ec2/": {
+      "filePath": "_authenticated/ec2/index.lazy.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/help-center/": {
       "filePath": "_authenticated/help-center/index.lazy.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/product-category/": {
-      "filePath": "_authenticated/product-category/index.lazy.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/product/": {
-      "filePath": "_authenticated/product/index.lazy.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/settings/": {
       "filePath": "_authenticated/settings/index.lazy.tsx",
       "parent": "/_authenticated/settings"
     },
-    "/_authenticated/tasks/": {
-      "filePath": "_authenticated/tasks/index.lazy.tsx",
+    "/_authenticated/ec2/create-instance/": {
+      "filePath": "_authenticated/ec2/create-instance/index.lazy.tsx",
       "parent": "/_authenticated"
     }
   }

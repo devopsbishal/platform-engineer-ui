@@ -54,11 +54,11 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: 'Gaurav',
-      lastName: 'Soni',
-      email: 'gaurav+test@avendi.me',
-      password: 'gaurav@123',
-      confirmPassword: 'gaurav@123',
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 

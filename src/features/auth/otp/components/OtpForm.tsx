@@ -99,6 +99,7 @@ export function OtpForm({ className, ...props }: OtpFormProps) {
                         return (
                           <Input
                             key={i}
+                            disabled={isLoading}
                             ref={(el) => {
                               inputRefs.current[i] = el;
                             }}

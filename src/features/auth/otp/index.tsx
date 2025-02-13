@@ -1,4 +1,5 @@
-import { Link, useCanGoBack, useRouter } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
+import { Link, useRouter } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { PATH } from '@/constants/PATH';
 import { Button } from '@/components/ui/button';
@@ -8,7 +9,11 @@ import { OtpForm } from './components/OtpForm';
 
 export default function Otp() {
   const router = useRouter();
-  const canGoBack = useCanGoBack();
+  const [hasBackHistory, setHasBackHistory] = useState(false);
+
+  useEffect(() => {
+    setHasBackHistory(window.history.length > 1);
+  }, []);
 
   return (
     <AuthLayout>
@@ -33,17 +38,16 @@ export default function Otp() {
           </Link>
         </p>
       </Card>
-      {canGoBack && (
-        <>
-          <Button
-            className='mx-auto mt-4 flex gap-2'
-            variant={'ghost'}
-            onClick={() => router.history.back()}
-          >
-            <ArrowLeft />
-            Go Back
-          </Button>
-        </>
+
+      {hasBackHistory && (
+        <Button
+          className='mx-auto mt-4 flex gap-2'
+          variant={'ghost'}
+          onClick={() => router.history.back()}
+        >
+          <ArrowLeft />
+          Go Back
+        </Button>
       )}
     </AuthLayout>
   );

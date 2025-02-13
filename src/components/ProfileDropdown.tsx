@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,19 @@ import {
 import { useAuth } from '@/features/auth/stores/authStore';
 
 export function ProfileDropdown() {
-  const { logout, user } = useAuth();
+  const { logout, user: storedUser } = useAuth();
+  const [user, setUser] = useState({
+    name: '',
+    email: '',
+  });
+
+  useEffect(() => {
+    setUser({
+      name: storedUser?.name || '',
+      email: storedUser?.email || '',
+    });
+    console.log(storedUser);
+  }, [storedUser?.email]);
 
   return (
     <DropdownMenu modal={false}>
@@ -22,7 +35,9 @@ export function ProfileDropdown() {
         <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
           <Avatar className='h-8 w-8'>
             <AvatarImage src='/avatars/01.png' alt='@shadcn' />
-            <AvatarFallback>{user?.name[0]?.toUpperCase() || 'GS'}</AvatarFallback>
+            <AvatarFallback>
+              {user?.name[0]?.toUpperCase() || 'GS'}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

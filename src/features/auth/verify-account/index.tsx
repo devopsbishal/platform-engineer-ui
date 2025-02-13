@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useSearch } from '@tanstack/react-router';
+import CustomError from '@/features/errors/CustomError';
 import { useVerifyAccount } from '../hooks/useAuth.hook';
 import Otp from '../otp';
 
@@ -14,6 +15,15 @@ export default function VerifyAccount() {
   }) as Params;
 
   const verifyAccount = useVerifyAccount();
+
+  if (!email) {
+    return (
+      <CustomError
+        heading='Invalid URL format'
+        message="The page you're looking for doesn't exist. Please check the URL or return to the homepage."
+      />
+    );
+  }
 
   useEffect(() => {
     const data = {
